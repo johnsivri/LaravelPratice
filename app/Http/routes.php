@@ -14,3 +14,20 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+/*
+| Authentication routes
+*/
+Route::auth();
+
+/*
+| Home controller
+*/
+Route::get('/home', 'HomeController@index');
+
+/*
+| Task controller
+*/
+Route::get('/tasks', 'TaskController@index');
+Route::post('/task', 'TaskController@store');
+Route::delete('/task/{task}', 'TaskController@destroy');
