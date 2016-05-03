@@ -30,7 +30,7 @@ class TaskController extends Controller
     public function index(Request $request)
     {
       return view('tasks.index', [
-        'tasks' =>  $this->tasks->forUser($request->user());
+        'tasks' =>  $this->tasks->forUser($request->user())
       ]);
     }
 
@@ -40,11 +40,11 @@ class TaskController extends Controller
     public function store(Request $request)
     {
       $this->validate($request, [
-        'name' => 'required|max:255',
+        'name' => 'required|max:255'
       ]);
 
       $request->user()->tasks()->create([
-        'name'  =>  $request->name;
+        'name'  =>  $request->name
       ]);
 
       return redirect('/tasks');
