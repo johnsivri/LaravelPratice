@@ -18,6 +18,7 @@ class CreateTasksTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->date('due_date');
+            $table->boolean('completed')->nullable();
             $table->timestamps();
         });
     }

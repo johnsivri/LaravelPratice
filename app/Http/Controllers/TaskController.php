@@ -48,7 +48,8 @@ class TaskController extends Controller
       $request->user()->tasks()->create([
         'name'        =>  $request->name,
         'description' =>  $request->description,
-        'due_date'    =>  $request->due_date
+        'due_date'    =>  $request->due_date,
+        'completed'   =>  'NULL'
       ]);
 
       return redirect('/tasks');
@@ -68,10 +69,25 @@ class TaskController extends Controller
     /*
     | Edit a given task
     */
-    public function edit(Request $request, Task $task, User $user)
+    public function edit(Request $request, Task $task)
     {
-      $this->validate($request, [
-
+      return view('tasks.edit', [
+        'tasks' =>  $task
       ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+      $date = $request->input('eDue_date');
+      $due_date = date('Y-m-d', strtotime($date));
+
+      $dbTask = Task::find($id);
+      $dbTask->name = $request->input('eName');
+      $dbTask->description = $request->input('eDescription');
+      $dbTask->due_date = $request->input('eDue_date');
+
+      $dbTask->save();
+
+      return redirect('/tasks');
     }
 }
