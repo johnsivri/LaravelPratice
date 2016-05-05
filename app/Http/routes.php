@@ -29,5 +29,6 @@ Route::get('/home', 'HomeController@index');
 | Task controller
 */
 Route::get('/tasks', 'TaskController@index');
+Route::get('/tasks/{task}','TaskController@edit');
 Route::post('/task', 'TaskController@store');
 Route::delete('/task/{task}', 'TaskController@destroy');

@@ -40,11 +40,15 @@ class TaskController extends Controller
     public function store(Request $request)
     {
       $this->validate($request, [
-        'name' => 'required|max:255'
+        'name'        =>  'required|max:255',
+        'description' =>  'required|max:255',
+        'due_date'    =>  'required|date'
       ]);
 
       $request->user()->tasks()->create([
-        'name'  =>  $request->name
+        'name'        =>  $request->name,
+        'description' =>  $request->description,
+        'due_date'    =>  $request->due_date
       ]);
 
       return redirect('/tasks');
@@ -60,5 +64,14 @@ class TaskController extends Controller
       $task->delete();
 
       return redirect('/tasks');
+    }
+    /*
+    | Edit a given task
+    */
+    public function edit(Request $request, Task $task, User $user)
+    {
+      $this->validate($request, [
+
+      ]);
     }
 }
