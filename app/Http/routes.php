@@ -36,4 +36,5 @@ Route::get('/tasks/edit/{task}', [
 Route::post('/task', 'TaskController@store');
 Route::post('/task/edit/{id}', 'TaskController@update');
 Route::post('/tasks/{id}', 'TaskController@complete');
+Route::post('/tasks/archive/{id}', 'TaskController@archive');
 Route::delete('/task/{task}', 'TaskController@destroy');

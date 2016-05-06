@@ -78,7 +78,24 @@
         </div>
     </nav>
 
-    @yield('content')
+
+    @if (session('error'))
+      <div id="error" class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2>Error!</h2>
+        <p>{{ session('error') }}</p>
+      </div>
+    @elseif (session('message'))
+      <div id="success" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2>Success!</h2>
+        <p>{{ session('message') }}</p>
+      </div>
+    @endif
+
+    <div class="container">
+      @yield('content')
+    </div>
 
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>

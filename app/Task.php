@@ -10,12 +10,12 @@ class Task extends Model
     | Attributes that are mass assignable
     */
 
-    protected $fillable = ['name', 'description', 'due_date', 'completed'];
+    protected $fillable = ['name', 'description', 'due_date', 'archived_at', 'date_completed', 'completed'];
 
     /*
     | Declaring dates
     */
-    protected $dates = ['due_date'];
+    protected $dates = ['due_date', 'archived_at', 'date_completed'];
 
     public function user()
     {

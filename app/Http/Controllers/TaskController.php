@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Task;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Repositories\TaskRepository;
 
@@ -52,7 +53,7 @@ class TaskController extends Controller
         'completed'   =>  'NULL'
       ]);
 
-      return redirect('/tasks');
+      return redirect('/tasks')->with('success', 'Successfully created task!');;
     }
 
     /*
@@ -60,11 +61,14 @@ class TaskController extends Controller
     */
     public function destroy(Request $request, Task $task)
     {
-      $this->authorize('destroy', $task);
+      $dbTask = Task::find($task->id);
 
+      $this->authorize('destroy', $task);
       $task->delete();
 
-      return redirect('/tasks');
+      $dbTask->save();
+
+      return redirect('/tasks')->with('success', 'Successfully deleted task!');;
     }
     /*
     | Edit a given task
@@ -81,6 +85,7 @@ class TaskController extends Controller
     */
     public function update(Request $request, $id)
     {
+
       $date = $request->input('eDue_date');
       $due_date = date('Y-m-d', strtotime($date));
 
@@ -91,7 +96,7 @@ class TaskController extends Controller
 
       $dbTask->save();
 
-      return redirect('/tasks');
+      return redirect('/tasks')->with('success', 'Successfully edited task!');
     }
 
     /*
@@ -102,6 +107,7 @@ class TaskController extends Controller
       try {
         $dbTask = Task::find($id);
         $dbTask->completed = true;
+        $dbTask->date_completed = Carbon::now();
         $dbTask->save();
 
         return "true";
@@ -109,6 +115,30 @@ class TaskController extends Controller
       catch (Exception $err)
       {
         return "false";
+      }
+    }
+
+    /*
+    | ARchives given task
+    */
+
+    public function archive(Request $request, $id)
+    {
+      try
+      {
+        $myTime = Carbon::now();
+
+        $dbTask = Task::find($id);
+        $dbTask->archived_at = $myTime;
+        $dbTask->save();
+
+        return view('archives.archive', [
+          'tasks' => $this->tasks->forUser($request->user())
+        ])->with('success', 'Successfully archived!');
+      }
+      catch (Exception $err)
+      {
+        return redirect('/tasks')->with('error', 'There has been an error.');
       }
     }
 }
