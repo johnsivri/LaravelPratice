@@ -67,51 +67,86 @@
         <!-- Table body -->
         <tbody>
           @foreach ($tasks as $task)
-            <tr>
-              <!-- Task name -->
-              <td class="table-text">
-                <div>{{ $task->name }}</div>
-              </td>
-              <!-- Date created -->
-              <td>
-                <div>{{ date('F d, Y', strtotime($task->due_date)) }}</div>
-              </td>
-              <!-- Task description -->
-              <td class="table-text">
-                <div>{{ $task->description }}</div>
-              </td>
-              <!-- Edit task -->
-              <td>
-                <a href="{{ URL::route('edit_task', $task->id) }}" class="btn btn-default">
-                  <i class="fa fa-btn fa-edit"></i>Edit
-                </a>
-              </td>
-              <!-- Delete button -->
-              <td>
-                <form action="{{ url('task/'.$task->id) }}" method="POST">
-                  {!! csrf_field() !!}
-                  {!! method_field('DELETE') !!}
-
-                  <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
-                    <i class="fa fa-btn fa-trash"></i>Delete
-                  </button>
-                </form>
-              </td>
-              @if ($task->completed == true)
-                <!-- Archive task -->
+            @if ($task->completed == true)
+              <tr>
+                <!-- Task name -->
+                <td class="table-text">
+                  <div>{{ $task->name }}</div>
+                </td>
+                <!-- Date created -->
                 <td>
+                  <div>{{ date('F d, Y', strtotime($task->due_date)) }}</div>
+                </td>
+                <!-- Task description -->
+                <td class="table-text">
+                  <div>{{ $task->description }}</div>
+                </td>
+                <!-- Empty cell -->
+                <td></td>
+                <!-- Delete button -->
+                <td>
+                  <form action="{{ url('task/'.$task->id) }}" method="POST">
+                    {!! csrf_field() !!}
+                    {!! method_field('DELETE') !!}
+
+                    <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
+                      <i class="fa fa-btn fa-trash"></i>Delete
+                    </button>
+                  </form>
+                </td>
+                <!-- Archive task -->
+                <td id="archive{{ $task->id }}">
                   <a href="#" class="btn btn-info">
                     <i class="fa fa-btn fa-briefcase"></i>Archive
                   </a>
                 </td>
-              @else
+                <!-- Task is complete -->
+                <td>
+                  <span class="glyphicon glyphicon-ok"></span>
+                </td>
+              </tr>
+            @else
+              <tr>
+                <!-- Task name -->
+                <td class="table-text">
+                  <div>{{ $task->name }}</div>
+                </td>
+                <!-- Date created -->
+                <td>
+                  <div>{{ date('F d, Y', strtotime($task->due_date)) }}</div>
+                </td>
+                <!-- Task description -->
+                <td class="table-text">
+                  <div>{{ $task->description }}</div>
+                </td>
+                <!-- Edit task -->
+                <td id="edit{{ $task->id }}">
+                  <a href="{{ URL::route('edit_task', $task->id) }}" class="btn btn-default">
+                    <i class="fa fa-btn fa-edit"></i>Edit
+                  </a>
+                </td>
+                <!-- Delete button -->
+                <td>
+                  <form action="{{ url('task/'.$task->id) }}" method="POST">
+                    {!! csrf_field() !!}
+                    {!! method_field('DELETE') !!}
+
+                    <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
+                      <i class="fa fa-btn fa-trash"></i>Delete
+                    </button>
+                  </form>
+                </td>
+                <!-- Empty cell -->
                 <td></td>
-              @endif
-              <!-- Complete task -->
-              <td>
-                <input type="checkbox" id="complete" name="complete" />
-              </td>
-            </tr>
+                <!-- Complete task -->
+                <form action="{{ url('tasks/'.$task->id) }}" method="POST">
+                  <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}">
+                  <td>
+                    <input type="checkbox" data-id="{{ $task->id }}" id="complete{{ $task->id }}" name="completed" onclick="Completed(this)" />
+                  </td>
+                </form>
+              </tr>
+            @endif
           @endforeach
         </tbody>
       @else
@@ -123,3 +158,41 @@
   </div>
 </div>
 @endsection
+
+@if (isset($task))
+  @section('scripts')
+    <script type="text/javascript">
+
+      function Completed(input) {
+        var checkBoxId  = $(input).data("id");
+        var checkBox    = $("#complete" + checkBoxId);
+        var complete    = true;
+        var editRow     = $("#edit"+checkBoxId);
+        var archRow     = $("#archive"+checkBoxId);
+        var url         = "{{ URL::action('TaskController@complete', ['id' => $task->id]) }}";
+        var token       = $('input[id="_token"]').attr('value');
+
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.post(url, {'_token': token, 'completed': complete}, function (data) {
+          console.log(data);
+
+          if (data == "true")
+          {
+            checkBox.parent("td").html("<span class='glyphicon glyphicon-ok'></span>");
+            editRow.html("<span></span>");
+            archRow.html("<a href='#' class='btn btn-info'><i class='fa fa-btn fa-briefcase'></i>Archive</a>")
+          }
+          else {
+            alert("Error");
+          }
+        });
+      }
+    </script>
+  @endsection
+@endif

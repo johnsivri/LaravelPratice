@@ -76,6 +76,9 @@ class TaskController extends Controller
       ]);
     }
 
+    /*
+    | Update a given task
+    */
     public function update(Request $request, $id)
     {
       $date = $request->input('eDue_date');
@@ -89,5 +92,23 @@ class TaskController extends Controller
       $dbTask->save();
 
       return redirect('/tasks');
+    }
+
+    /*
+    | Sets task completed field to true, ajax response
+    */
+    public function complete(Request $request, $id)
+    {
+      try {
+        $dbTask = Task::find($id);
+        $dbTask->completed = true;
+        $dbTask->save();
+
+        return "true";
+      }
+      catch (Exception $err)
+      {
+        return "false";
+      }
     }
 }

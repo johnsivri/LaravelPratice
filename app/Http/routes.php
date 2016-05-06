@@ -30,9 +30,10 @@ Route::get('/home', 'HomeController@index');
 */
 Route::get('/tasks', 'TaskController@index');
 Route::get('/tasks/edit/{task}', [
-  'as'    =>  'edit_task',
-  'uses'  =>  'TaskController@edit'
+  'uses'  =>  'TaskController@edit',
+  'as'    =>  'edit_task'
 ]);
 Route::post('/task', 'TaskController@store');
-Route::post('/task/edit/{task}', 'TaskController@update');
+Route::post('/task/edit/{id}', 'TaskController@update');
+Route::post('/tasks/{id}', 'TaskController@complete');
 Route::delete('/task/{task}', 'TaskController@destroy');
