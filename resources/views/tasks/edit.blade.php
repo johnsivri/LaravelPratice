@@ -9,6 +9,7 @@
     <!-- Edit task form -->
     <form action="{{ url('task/edit/'.$tasks->id) }}" method="POST" class="form-horizontal">
     {!! csrf_field() !!}
+    {!! method_field('PATCH') !!}
       <!-- Edit task name -->
       <div class="form-group">
         <label for="edit-name" class="col-sm-3 control-label">Task</label>

@@ -31,8 +31,15 @@ class TaskController extends Controller
     public function index(Request $request)
     {
       return view('tasks.index', [
-        'tasks' =>  $this->tasks->forUser($request->user())
+        'tasks' =>  $this->tasks->forUserWithoutArchive($request->user())
       ]);
+    }
+
+    public function alerts(Request $request)
+    {
+      $grabSession = $this->tasks->sessionSet($request->session()->all());
+
+      return $grabSession;
     }
 
     /*
@@ -47,10 +54,9 @@ class TaskController extends Controller
       ]);
 
       $request->user()->tasks()->create([
-        'name'        =>  $request->name,
-        'description' =>  $request->description,
-        'due_date'    =>  $request->due_date,
-        'completed'   =>  'NULL'
+        'name'            =>  $request->name,
+        'description'     =>  $request->description,
+        'due_date'        =>  $request->due_date
       ]);
 
       return redirect('/tasks')->with('success', 'Successfully created task!');;
@@ -119,8 +125,15 @@ class TaskController extends Controller
     }
 
     /*
-    | ARchives given task
+    | Archives given task
     */
+
+    public function getArchive(Request $request)
+    {
+      return view('archives.archive', [
+        'tasks' => $this->tasks->forUser($request->user())
+      ]);
+    }
 
     public function archive(Request $request, $id)
     {

@@ -2,6 +2,8 @@
 
 @extends('layouts.app')
 
+@section('title', 'Tasks')
+
 @section('content')
 
 <div class="panel-body">
@@ -67,90 +69,88 @@
         <!-- Table body -->
         <tbody>
           @foreach ($tasks as $task)
-            @if ($task->archived_at == null)
-              @if ($task->completed == true)
-                <tr>
-                  <!-- Task name -->
-                  <td class="table-text">
-                    <div>{{ $task->name }}</div>
-                  </td>
-                  <!-- Date due -->
-                  <td>
-                    <div>{{ date('F d, Y', strtotime($task->due_date)) }}</div>
-                  </td>
-                  <!-- Task description -->
-                  <td class="table-text">
-                    <div>{{ $task->description }}</div>
-                  </td>
-                  <!-- Empty cell -->
-                  <td></td>
-                  <!-- Delete button -->
-                  <td>
-                    <form action="{{ url('task/'.$task->id) }}" method="POST">
-                      {!! csrf_field() !!}
-                      {!! method_field('DELETE') !!}
-
-                      <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
-                        <i class="fa fa-btn fa-trash"></i>Delete
-                      </button>
-                    </form>
-                  </td>
-                  <!-- Archive task -->
-                  <form action="{{ url('tasks/archive/'.$task->id) }}" method="POST" class="form-horizontal">
+            @if ($task->completed == true)
+              <tr>
+                <!-- Task name -->
+                <td class="table-text">
+                  <div>{{ $task->name }}</div>
+                </td>
+                <!-- Date due -->
+                <td>
+                  <div>{{ date('F d, Y', strtotime($task->due_date)) }}</div>
+                </td>
+                <!-- Task description -->
+                <td class="table-text">
+                  <div>{{ $task->description }}</div>
+                </td>
+                <!-- Empty cell -->
+                <td></td>
+                <!-- Delete button -->
+                <td>
+                  <form action="{{ url('task/'.$task->id) }}" method="POST">
                     {!! csrf_field() !!}
-                    <td>
-                      <button type="submit" class="btn btn-info">
-                        <i class="fa fa-btn fa-briefcase"></i>Archive
-                      </button>
-                    </td>
-                  </form>
-                  <!-- Task is complete -->
-                  <td>
-                    <span class="glyphicon glyphicon-ok"></span>
-                  </td>
-                </tr>
-              @else
-                <tr>
-                  <!-- Task name -->
-                  <td class="table-text">
-                    <div>{{ $task->name }}</div>
-                  </td>
-                  <!-- Date created -->
-                  <td>
-                    <div>{{ date('F d, Y', strtotime($task->due_date)) }}</div>
-                  </td>
-                  <!-- Task description -->
-                  <td class="table-text">
-                    <div>{{ $task->description }}</div>
-                  </td>
-                  <!-- Edit task -->
-                  <td id="edit{{ $task->id }}">
-                    <a href="{{ URL::route('edit_task', $task->id) }}" class="btn btn-default">
-                      <i class="fa fa-btn fa-edit"></i>Edit
-                    </a>
-                  </td>
-                  <!-- Delete button -->
-                  <td>
-                    <form action="{{ url('task/'.$task->id) }}" method="POST">
-                      {!! csrf_field() !!}
-                      {!! method_field('DELETE') !!}
+                    {!! method_field('DELETE') !!}
 
-                      <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
-                        <i class="fa fa-btn fa-trash"></i>Delete
-                      </button>
-                    </form>
-                  </td>
-                  <!-- Empty cell -->
-                  <td id="archive{{ $task->id }}"></td>
-                  <!-- Complete task -->
-                  <form action="{{ url('tasks/'.$task->id) }}" method="POST">
-                    {!! csrf_field() !!}
-                    <td>
-                      <input type="checkbox" data-id="{{ $task->id }}" id="complete{{ $task->id }}" name="completed" onclick="Completed(this)" />
-                    </td>
+                    <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
+                      <i class="fa fa-btn fa-trash"></i>Delete
+                    </button>
                   </form>
-                </tr>
-              @endif
+                </td>
+                <!-- Archive task -->
+                <form action="{{ url('tasks/archive/'.$task->id) }}" method="POST" class="form-horizontal">
+                  {!! csrf_field() !!}
+                  <td>
+                    <button type="submit" class="btn btn-info">
+                      <i class="fa fa-btn fa-briefcase"></i>Archive
+                    </button>
+                  </td>
+                </form>
+                <!-- Task is complete -->
+                <td>
+                  <span class="glyphicon glyphicon-ok"></span>
+                </td>
+              </tr>
+            @else
+              <tr>
+                <!-- Task name -->
+                <td class="table-text">
+                  <div>{{ $task->name }}</div>
+                </td>
+                <!-- Date created -->
+                <td>
+                  <div>{{ date('F d, Y', strtotime($task->due_date)) }}</div>
+                </td>
+                <!-- Task description -->
+                <td class="table-text">
+                  <div>{{ $task->description }}</div>
+                </td>
+                <!-- Edit task -->
+                <td id="edit{{ $task->id }}">
+                  <a href="{{ URL::route('edit_task', $task->id) }}" class="btn btn-default">
+                    <i class="fa fa-btn fa-edit"></i>Edit
+                  </a>
+                </td>
+                <!-- Delete button -->
+                <td>
+                  <form action="{{ url('task/'.$task->id) }}" method="POST">
+                    {!! csrf_field() !!}
+                    {!! method_field('DELETE') !!}
+
+                    <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
+                      <i class="fa fa-btn fa-trash"></i>Delete
+                    </button>
+                  </form>
+                </td>
+                <!-- Empty cell -->
+                <td id="archive{{ $task->id }}"></td>
+                <!-- Complete task -->
+                <form action="{{ url('tasks/'.$task->id) }}" method="POST">
+                  {!! csrf_field() !!}
+                  <td>
+                    <input type="checkbox" data-id="{{ $task->id }}" id="complete{{ $task->id }}" name="completed" onclick="Completed(this)" />
+                  </td>
+                </form>
+              </tr>
             @endif
           @endforeach
         </tbody>
@@ -185,7 +185,6 @@
         });
 
         $.post(url, {'_token': token, 'completed': complete}, function (data) {
-          console.log(data);
 
           if (data == "true")
           {
@@ -201,7 +200,23 @@
         });
       }
 
+      $.get("{{ URL::action('TaskController@alerts') }}", {}, function(data) {
+        var alertDiv = document.getElementById('success');
+
+        if (data == "active")
+        {
+          $(alertDiv).fadeOut(3000);
+        }
+        else if (data == "expired")
+        {
+          //
+        }
+        else
+        {
+          alert("Error");
+        }
       });
+
     </script>
   @endsection
 @endif

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Laravel</title>
+    <title>Laravel - @yield('title')</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
@@ -43,7 +43,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    ToDo App
                 </a>
             </div>
 
@@ -53,6 +53,7 @@
                     <li><a href="{{ url('/home') }}">Home</a></li>
                     @if (Auth::check())
                       <li><a href="{{ url('/tasks') }}">Tasks</a></li>
+                      <li><a href="{{ url('/tasks/archive/') }}">Archive</a></li>
                     @endif
                 </ul>
 
@@ -69,7 +70,8 @@
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                              <li><a href="{{ url('/profile') }}"><i class="fa fa-btn fa-user"></i>Profile</a></li>
+                              <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
                     @endif
@@ -80,16 +82,16 @@
 
 
     @if (session('error'))
-      <div id="error" class="alert alert-warning alert-dismissible" role="alert">
+      <div class="alert alert-warning alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h2>Error!</h2>
         <p>{{ session('error') }}</p>
       </div>
-    @elseif (session('message'))
+    @elseif (session('success'))
       <div id="success" class="alert alert-success alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h2>Success!</h2>
-        <p>{{ session('message') }}</p>
+        <p>{{ session('success') }}</p>
       </div>
     @endif
 

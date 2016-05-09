@@ -2,6 +2,8 @@
 
 @extends('layouts.app')
 
+@section('title', 'Archives')
+
 @section('content')
   <div class="panel panel-default">
     <!-- Include errors -->
@@ -37,6 +39,7 @@
                   <td>
                     <div>{{ $task->description }}</div>
                   </td>
+                  <!-- Task date completed -->
                   <td>{{ date('F d, Y H:i:s', strtotime($task->date_completed)) }}</td>
                 </tr>
               @endif

@@ -21,6 +21,11 @@ Route::get('/', function () {
 Route::auth();
 
 /*
+| User profile controller
+*/
+Route::get('/profile', 'UserController@getProfile');
+Route::patch('/profile/{id}, UserController@edit');
+/*
 | Home controller
 */
 Route::get('/home', 'HomeController@index');
@@ -33,8 +38,10 @@ Route::get('/tasks/edit/{task}', [
   'uses'  =>  'TaskController@edit',
   'as'    =>  'edit_task'
 ]);
+Route::get('/tasks/alerts', 'TaskController@alerts');
+Route::get('/tasks/archive', 'TaskController@getArchive');                    // Linked
 Route::post('/task', 'TaskController@store');
-Route::post('/task/edit/{id}', 'TaskController@update');
+Route::patch('/task/edit/{id}', 'TaskController@update');
 Route::post('/tasks/{id}', 'TaskController@complete');
-Route::post('/tasks/archive/{id}', 'TaskController@archive');
+Route::post('/tasks/archive/{id}', 'TaskController@archive');                  // Linked
 Route::delete('/task/{task}', 'TaskController@destroy');
